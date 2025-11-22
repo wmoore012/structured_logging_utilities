@@ -1,8 +1,8 @@
-# SPDX-License-Identifier: MIT
-# Copyright (c) 2024 MusicScope
+# SPDX - License - Identifier: MIT
+# Copyright (c) 2025 Perday CatalogLAB™
 
 """
-Custom exceptions for structured-logging-utilities module.
+Custom exceptions for structured - logging - utilities module.
 
 This module provides comprehensive error handling with specific exception types
 for different failure scenarios, enabling precise error handling and debugging.
@@ -10,23 +10,23 @@ for different failure scenarios, enabling precise error handling and debugging.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class StructuredLoggingUtilitiesError(Exception):
-    """Base exception for all structured-logging-utilities errors."""
+    """Base exception for all structured - logging - utilities errors."""
 
     def __init__(
         self,
         message: str,
-        details: Optional[Dict[str, Any]] = None,
-        suggestion: Optional[str] = None,
+        details: dict[str, Any] | None = None,
+        suggestion: str | None = None,
     ) -> None:
         """
         Initialize the exception with detailed error information.
 
         Args:
-            message: Human-readable error message
+            message: Human - readable error message
             details: Additional error context and debugging information
             suggestion: Suggested solution or next steps
         """
@@ -53,10 +53,10 @@ class ValidationError(StructuredLoggingUtilitiesError):
     """Raised when input validation fails."""
 
     def __init__(
-        self, field: str, value: Any, expected: str, suggestion: Optional[str] = None
+        self, field: str, value: Any, expected: str, suggestion: str | None = None
     ) -> None:
         """
-        Initialize validation error with field-specific information.
+        Initialize validation error with field - specific information.
 
         Args:
             field: Name of the field that failed validation
@@ -75,7 +75,9 @@ class ValidationError(StructuredLoggingUtilitiesError):
 class ConfigurationError(StructuredLoggingUtilitiesError):
     """Raised when configuration is invalid or missing."""
 
-    def __init__(self, config_key: str, issue: str, suggestion: Optional[str] = None) -> None:
+    def __init__(
+        self, config_key: str, issue: str, suggestion: str | None = None
+    ) -> None:
         """
         Initialize configuration error.
 
@@ -98,8 +100,8 @@ class ResourceError(StructuredLoggingUtilitiesError):
         self,
         resource: str,
         issue: str,
-        current_usage: Optional[str] = None,
-        suggestion: Optional[str] = None,
+        current_usage: str | None = None,
+        suggestion: str | None = None,
     ) -> None:
         """
         Initialize resource error.
@@ -128,7 +130,7 @@ class OperationError(StructuredLoggingUtilitiesError):
         operation: str,
         reason: str,
         retry_possible: bool = False,
-        suggestion: Optional[str] = None,
+        suggestion: str | None = None,
     ) -> None:
         """
         Initialize operation error.
@@ -140,7 +142,11 @@ class OperationError(StructuredLoggingUtilitiesError):
             suggestion: How to resolve the operation failure
         """
         message = f"Operation '{operation}' failed: {reason}"
-        details = {"operation": operation, "reason": reason, "retry_possible": retry_possible}
+        details = {
+            "operation": operation,
+            "reason": reason,
+            "retry_possible": retry_possible,
+        }
         super().__init__(message, details, suggestion)
         self.operation = operation
         self.reason = reason

@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: MIT
-Copyright (c) 2024 MusicScope -->
+Copyright (c) 2025 Perday CatalogLAB™ -->
 
 # Changelog
 
@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Context Manager Overhead**: <5ms additional latency per operation
 - **I/O Throughput**: Efficient file rotation and high-volume writes
 
-## [0.1.0] - 2024-12-17
+## [0.1.0] - 2025-12-17
 
 ### Added
 - Core structured logging functionality

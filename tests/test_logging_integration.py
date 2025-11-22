@@ -1,11 +1,11 @@
-# SPDX-License-Identifier: MIT
-# Copyright (c) 2024 MusicScope
+# SPDX - License - Identifier: MIT
+# Copyright (c) 2025 Perday CatalogLAB™
 
 """
 Integration tests for structured logging utilities.
 
-These tests verify end-to-end functionality using real database scenarios
-and production-like workloads, avoiding dummy data as specified.
+These tests verify end - to - end functionality using real database scenarios
+and production - like workloads, avoiding dummy data as specified.
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ class TestDatabaseLoggingIntegration:
 
     def test_database_query_logging_workflow(self):
         """Test complete database query logging workflow."""
-        logger = get_logger("database_integration")
+        get_logger("database_integration")
 
         # Capture log output
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -68,7 +68,9 @@ class TestDatabaseLoggingIntegration:
             log_content = log_file.read_text()
 
             # Parse JSON log entries
-            log_lines = [line.strip() for line in log_content.split("\n") if line.strip()]
+            log_lines = [
+                line.strip() for line in log_content.split("\n") if line.strip()
+            ]
             parsed_logs = [json.loads(line) for line in log_lines]
 
             # Verify connection log
@@ -91,7 +93,7 @@ class TestDatabaseLoggingIntegration:
 
     def test_etl_pipeline_logging_integration(self):
         """Test ETL pipeline logging with real data processing patterns."""
-        logger = get_logger("etl_pipeline")
+        get_logger("etl_pipeline")
 
         with tempfile.TemporaryDirectory() as temp_dir:
             log_file = Path(temp_dir) / "etl_integration.log"
@@ -101,7 +103,7 @@ class TestDatabaseLoggingIntegration:
             etl_logger.info(
                 "ETL job started",
                 extra={
-                    "job_id": "etl_spotify_tracks_20241217",
+                    "job_id": "etl_spotify_tracks_20251217",
                     "source_table": "spotify_raw",
                     "target_table": "songs",
                     "batch_size": 10000,
@@ -116,7 +118,11 @@ class TestDatabaseLoggingIntegration:
             for batch_num in range(3):
                 with log_performance(
                     f"etl_batch_{batch_num}",
-                    {"batch_number": batch_num, "batch_size": 10000, "source_table": "spotify_raw"},
+                    {
+                        "batch_number": batch_num,
+                        "batch_size": 10000,
+                        "source_table": "spotify_raw",
+                    },
                     logger=etl_logger,
                 ) as ctx:
                     # Simulate batch processing
@@ -137,10 +143,12 @@ class TestDatabaseLoggingIntegration:
             etl_logger.info(
                 "ETL job completed",
                 extra={
-                    "job_id": "etl_spotify_tracks_20241217",
+                    "job_id": "etl_spotify_tracks_20251217",
                     "total_processed": total_processed,
                     "total_failed": total_failed,
-                    "overall_success_rate": (total_processed / (total_processed + total_failed))
+                    "overall_success_rate": (
+                        total_processed / (total_processed + total_failed)
+                    )
                     * 100,
                     "job_duration_minutes": 45.2,
                     "throughput_records_per_second": total_processed / (45.2 * 60),
@@ -149,7 +157,9 @@ class TestDatabaseLoggingIntegration:
 
             # Verify comprehensive logging
             log_content = log_file.read_text()
-            log_lines = [line.strip() for line in log_content.split("\n") if line.strip()]
+            log_lines = [
+                line.strip() for line in log_content.split("\n") if line.strip()
+            ]
             parsed_logs = [json.loads(line) for line in log_lines]
 
             # Should have job start + 3 batch logs + job completion = 5 logs
@@ -175,8 +185,8 @@ class TestDatabaseLoggingIntegration:
             assert completion_log["throughput_records_per_second"] > 0
 
     def test_api_request_logging_integration(self):
-        """Test API request logging with real request/response patterns."""
-        logger = get_logger("api_integration")
+        """Test API request logging with real request / response patterns."""
+        get_logger("api_integration")
 
         with tempfile.TemporaryDirectory() as temp_dir:
             log_file = Path(temp_dir) / "api_integration.log"
@@ -186,21 +196,21 @@ class TestDatabaseLoggingIntegration:
             api_requests = [
                 {
                     "method": "GET",
-                    "endpoint": "/api/songs/search",
+                    "endpoint": "/api / songs / search",
                     "query": "bohemian rhapsody",
                     "expected_results": 23,
                     "expected_time_ms": 127,
                 },
                 {
                     "method": "POST",
-                    "endpoint": "/api/playlists",
+                    "endpoint": "/api / playlists",
                     "payload_size": 2048,
                     "expected_results": 1,
                     "expected_time_ms": 89,
                 },
                 {
                     "method": "GET",
-                    "endpoint": "/api/artists/12345/songs",
+                    "endpoint": "/api / artists / 12345 / songs",
                     "query": None,
                     "expected_results": 156,
                     "expected_time_ms": 203,
@@ -218,7 +228,7 @@ class TestDatabaseLoggingIntegration:
                         "method": request_data["method"],
                         "endpoint": request_data["endpoint"],
                         "user_id": f"user_{1000 + i}",
-                        "user_agent": "Mozilla/5.0 (compatible; test)",
+                        "user_agent": "Mozilla / 5.0 (compatible; test)",
                         "ip_address": f"192.168.1.{100 + i}",
                     },
                 )
@@ -240,17 +250,21 @@ class TestDatabaseLoggingIntegration:
                     ctx["response_code"] = 200
                     ctx["results_count"] = request_data["expected_results"]
                     ctx["cache_status"] = "miss" if i == 0 else "hit"
-                    ctx["database_queries"] = 2 if request_data["method"] == "GET" else 3
+                    ctx["database_queries"] = (
+                        2 if request_data["method"] == "GET" else 3
+                    )
 
             # Verify API logging
             log_content = log_file.read_text()
-            log_lines = [line.strip() for line in log_content.split("\n") if line.strip()]
+            log_lines = [
+                line.strip() for line in log_content.split("\n") if line.strip()
+            ]
             parsed_logs = [json.loads(line) for line in log_lines]
 
             # Should have 6 logs (3 requests × 2 logs each)
             assert len(parsed_logs) == 6
 
-            # Verify request/response pairs
+            # Verify request / response pairs
             for i in range(0, 6, 2):
                 request_log = parsed_logs[i]
                 response_log = parsed_logs[i + 1]
@@ -268,22 +282,22 @@ class TestDatabaseLoggingIntegration:
 
 
 class TestHighVolumeLoggingIntegration:
-    """Test logging under high-volume production scenarios."""
+    """Test logging under high - volume production scenarios."""
 
     def test_high_volume_concurrent_logging(self):
         """Test logging performance under high concurrent load."""
         import threading
         from concurrent.futures import ThreadPoolExecutor, as_completed
 
-        logger = get_logger("high_volume")
+        get_logger("high_volume")
 
         with tempfile.TemporaryDirectory() as temp_dir:
             log_file = Path(temp_dir) / "high_volume.log"
             volume_logger = get_logger("high_volume", log_file=str(log_file))
 
             # Track successful logs across threads
-            successful_logs = threading.local()
-            lock = threading.Lock()
+            threading.local()
+            threading.Lock()
             total_successful = 0
 
             def log_batch(thread_id: int, batch_size: int) -> int:
@@ -329,12 +343,12 @@ class TestHighVolumeLoggingIntegration:
 
             end_time = time.perf_counter()
 
-            # Verify high-volume performance
+            # Verify high - volume performance
             total_time = end_time - start_time
             throughput = total_successful / total_time
 
             # Should achieve reasonable throughput under load
-            assert throughput >= 500  # At least 500 logs/second
+            assert throughput >= 500  # At least 500 logs / second
             assert total_successful >= (
                 num_threads * messages_per_thread * 0.95
             )  # 95% success rate
@@ -342,7 +356,9 @@ class TestHighVolumeLoggingIntegration:
             # Verify log file integrity
             assert log_file.exists()
             log_content = log_file.read_text()
-            log_lines = [line.strip() for line in log_content.split("\n") if line.strip()]
+            log_lines = [
+                line.strip() for line in log_content.split("\n") if line.strip()
+            ]
 
             # Should have most of the expected log lines
             assert len(log_lines) >= total_successful * 0.9
@@ -355,8 +371,8 @@ class TestHighVolumeLoggingIntegration:
                 assert "message_number" in parsed
 
     def test_memory_efficient_long_running_logging(self):
-        """Test memory efficiency during long-running logging operations."""
-        logger = get_logger("memory_test")
+        """Test memory efficiency during long - running logging operations."""
+        get_logger("memory_test")
 
         with tempfile.TemporaryDirectory() as temp_dir:
             log_file = Path(temp_dir) / "memory_test.log"
@@ -412,7 +428,9 @@ class TestHighVolumeLoggingIntegration:
 
             # Verify log integrity
             log_content = log_file.read_text()
-            log_lines = [line.strip() for line in log_content.split("\n") if line.strip()]
+            log_lines = [
+                line.strip() for line in log_content.split("\n") if line.strip()
+            ]
 
             # Should have all messages plus batch completion logs
             expected_lines = num_messages + (num_messages // message_batch_size)
@@ -424,7 +442,7 @@ class TestErrorHandlingIntegration:
 
     def test_logging_with_database_failures(self):
         """Test logging behavior when database operations fail."""
-        logger = get_logger("db_failure_test")
+        get_logger("db_failure_test")
 
         with tempfile.TemporaryDirectory() as temp_dir:
             log_file = Path(temp_dir) / "db_failure.log"
@@ -449,7 +467,9 @@ class TestErrorHandlingIntegration:
 
             # Verify error was logged properly
             log_content = log_file.read_text()
-            log_lines = [line.strip() for line in log_content.split("\n") if line.strip()]
+            log_lines = [
+                line.strip() for line in log_content.split("\n") if line.strip()
+            ]
 
             assert len(log_lines) == 1
             error_log = json.loads(log_lines[0])
@@ -463,7 +483,7 @@ class TestErrorHandlingIntegration:
 
     def test_json_serialization_error_handling(self):
         """Test handling of JSON serialization errors in production scenarios."""
-        logger = get_logger("json_error_test")
+        get_logger("json_error_test")
 
         with tempfile.TemporaryDirectory() as temp_dir:
             log_file = Path(temp_dir) / "json_error.log"
@@ -482,14 +502,19 @@ class TestErrorHandlingIntegration:
                     "data": {
                         "valid_field": "valid_value",
                         "problematic_object": NonSerializableObject(),
-                        "nested_data": {"timestamp": time.time(), "valid_list": [1, 2, 3]},
+                        "nested_data": {
+                            "timestamp": time.time(),
+                            "valid_list": [1, 2, 3],
+                        },
                     },
                 },
             )
 
             # Verify log was written (should handle serialization gracefully)
             log_content = log_file.read_text()
-            log_lines = [line.strip() for line in log_content.split("\n") if line.strip()]
+            log_lines = [
+                line.strip() for line in log_content.split("\n") if line.strip()
+            ]
 
             assert len(log_lines) == 1
             log_entry = json.loads(log_lines[0])  # Should not raise exception
@@ -507,7 +532,7 @@ class TestProductionScenarioIntegration:
 
     def test_microservice_request_tracing(self):
         """Test request tracing across microservice boundaries."""
-        logger = get_logger("microservice_tracing")
+        get_logger("microservice_tracing")
 
         with tempfile.TemporaryDirectory() as temp_dir:
             log_file = Path(temp_dir) / "microservice.log"
@@ -524,7 +549,7 @@ class TestProductionScenarioIntegration:
                     "trace_id": trace_id,
                     "user_id": user_id,
                     "service": "api_gateway",
-                    "endpoint": "/api/songs/search",
+                    "endpoint": "/api / songs / search",
                     "method": "GET",
                     "source_ip": "192.168.1.100",
                 },
@@ -571,7 +596,9 @@ class TestProductionScenarioIntegration:
 
             # Verify complete trace
             log_content = log_file.read_text()
-            log_lines = [line.strip() for line in log_content.split("\n") if line.strip()]
+            log_lines = [
+                line.strip() for line in log_content.split("\n") if line.strip()
+            ]
             parsed_logs = [json.loads(line) for line in log_lines]
 
             # Should have 4 log entries
@@ -584,7 +611,12 @@ class TestProductionScenarioIntegration:
 
             # Verify service progression
             services = [log["service"] for log in parsed_logs]
-            assert services == ["api_gateway", "auth_service", "search_service", "api_gateway"]
+            assert services == [
+                "api_gateway",
+                "auth_service",
+                "search_service",
+                "api_gateway",
+            ]
 
             # Verify performance logs have timing data
             perf_logs = [log for log in parsed_logs if "duration_ms" in log]

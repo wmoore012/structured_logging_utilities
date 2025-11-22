@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: MIT
-# Copyright (c) 2024 MusicScope
+# SPDX - License - Identifier: MIT
+# Copyright (c) 2025 Perday CatalogLAB™
 
 """
 Tests for structured logging core functionality.
@@ -136,7 +136,7 @@ class TestJSONFormatter:
         assert parsed["metadata"] == {"key": "value"}
 
     def test_json_formatter_handles_non_serializable_data(self):
-        """Test that JSON formatter handles non-JSON-serializable data gracefully."""
+        """Test that JSON formatter handles non - JSON - serializable data gracefully."""
         formatter = JSONFormatter()
         record = logging.LogRecord(
             name="test",
@@ -148,7 +148,7 @@ class TestJSONFormatter:
             exc_info=None,
         )
 
-        # Add non-serializable data
+        # Add non - serializable data
         record.non_serializable = object()
 
         output = formatter.format(record)
@@ -210,7 +210,9 @@ class TestLogPerformance:
         logger = get_logger("test_performance_context")
 
         with patch.object(logger, "log") as mock_log:
-            with log_performance("test_operation", {"initial": "value"}, logger=logger) as ctx:
+            with log_performance(
+                "test_operation", {"initial": "value"}, logger=logger
+            ) as ctx:
                 ctx["updated"] = "new_value"
                 ctx["count"] = 42
 
@@ -226,10 +228,9 @@ class TestLogPerformance:
         """Test that log_performance logs exceptions properly."""
         logger = get_logger("test_performance_exception")
 
-        with patch.object(logger, "error") as mock_error:
-            with pytest.raises(ValueError):
-                with log_performance("failing_operation", logger=logger):
-                    raise ValueError("Test error")
+        with patch.object(logger, "error") as mock_error, pytest.raises(ValueError):
+            with log_performance("failing_operation", logger=logger):
+                raise ValueError("Test error")
 
         # Verify error was logged
         mock_error.assert_called_once()
@@ -313,7 +314,11 @@ class TestDatabaseIntegration:
             # Log ETL batch processing
             with log_performance(
                 "etl_batch_process",
-                {"source_table": "spotify_raw", "target_table": "songs", "batch_size": 10000},
+                {
+                    "source_table": "spotify_raw",
+                    "target_table": "songs",
+                    "batch_size": 10000,
+                },
                 logger=logger,
             ) as ctx:
                 # Simulate processing
@@ -340,8 +345,12 @@ class TestDatabaseIntegration:
                 "API request processed",
                 extra={
                     "method": "GET",
-                    "endpoint": "/api/songs/search",
-                    "query_params": {"q": "bohemian rhapsody", "limit": 50, "offset": 0},
+                    "endpoint": "/api / songs / search",
+                    "query_params": {
+                        "q": "bohemian rhapsody",
+                        "limit": 50,
+                        "offset": 0,
+                    },
                     "response_code": 200,
                     "response_time_ms": 127.3,
                     "results_count": 23,
@@ -355,7 +364,7 @@ class TestDatabaseIntegration:
         call_args = mock_info.call_args
         extra_data = call_args[1]["extra"]
 
-        assert extra_data["endpoint"] == "/api/songs/search"
+        assert extra_data["endpoint"] == "/api / songs / search"
         assert extra_data["response_code"] == 200
         assert extra_data["results_count"] == 23
 
@@ -434,7 +443,7 @@ class TestErrorHandling:
     def test_file_handler_creation_failure(self):
         """Test graceful handling when file handler creation fails."""
         # Try to create logger with invalid file path
-        logger = get_logger("test_file_fail", log_file="/invalid/path/test.log")
+        logger = get_logger("test_file_fail", log_file="/invalid / path / test.log")
 
         # Should still work with console handler
         assert len(logger.handlers) >= 1

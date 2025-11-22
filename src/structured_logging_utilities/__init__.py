@@ -1,10 +1,10 @@
-# SPDX-License-Identifier: MIT
-# Copyright (c) 2024 Wilton Moore
+# SPDX - License - Identifier: MIT
+# Copyright (c) 2025 Wilton Moore
 
 """
 Structured Logging Utilities
 
-Production-ready structured logging with JSON output and automatic performance timing.
+Production - ready structured logging with JSON output and automatic performance timing.
 """
 
 from importlib.metadata import PackageNotFoundError, version
@@ -20,7 +20,7 @@ from .core import (
 )
 
 try:
-    __version__ = version("structured-logging-utilities")
+    __version__ = version("structured - logging - utilities")
 except PackageNotFoundError:
     __version__ = "0.0.0"
 

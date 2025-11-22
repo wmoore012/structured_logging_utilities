@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: MIT
-# Copyright (c) 2024 MusicScope
+# SPDX - License - Identifier: MIT
+# Copyright (c) 2025 Perday CatalogLAB™
 
 """
 Tests for structured logging benchmarking functionality.
@@ -55,7 +55,7 @@ class TestLoggingThroughputBenchmark:
     """Test logging throughput benchmarking."""
 
     def test_benchmark_logging_throughput_single_thread(self):
-        """Test single-threaded logging throughput benchmark."""
+        """Test single - threaded logging throughput benchmark."""
         result = benchmark_logging_throughput(log_count=100, concurrent_threads=1)
 
         assert result.test_name == "logging_throughput"
@@ -68,7 +68,7 @@ class TestLoggingThroughputBenchmark:
         assert result.metadata["concurrent_threads"] == 1
 
     def test_benchmark_logging_throughput_multi_thread(self):
-        """Test multi-threaded logging throughput benchmark."""
+        """Test multi - threaded logging throughput benchmark."""
         result = benchmark_logging_throughput(log_count=100, concurrent_threads=2)
 
         assert result.test_name == "logging_throughput"
@@ -82,7 +82,7 @@ class TestLoggingThroughputBenchmark:
         """Test that logging throughput benchmark produces reasonable performance metrics."""
         result = benchmark_logging_throughput(log_count=1000, concurrent_threads=1)
 
-        # Should achieve reasonable throughput (at least 100 logs/second)
+        # Should achieve reasonable throughput (at least 100 logs / second)
         assert result.ops_per_second >= 100
 
         # Memory usage should be reasonable (less than 100MB for 1000 logs)
@@ -115,7 +115,7 @@ class TestJSONSerializationBenchmark:
         """Test that JSON serialization benchmark produces reasonable metrics."""
         result = benchmark_json_serialization(serialization_count=5000)
 
-        # Should achieve high throughput (at least 1000 serializations/second)
+        # Should achieve high throughput (at least 1000 serializations / second)
         assert result.ops_per_second >= 1000
 
         # Should have 100% success rate for valid JSON
@@ -129,10 +129,10 @@ class TestJSONSerializationBenchmark:
 
 
 class TestIOPerformanceBenchmark:
-    """Test I/O performance benchmarking."""
+    """Test I / O performance benchmarking."""
 
     def test_benchmark_io_performance(self):
-        """Test I/O performance benchmark."""
+        """Test I / O performance benchmark."""
         result = benchmark_io_performance(write_count=100, file_rotation_size=50)
 
         assert result.test_name == "io_performance"
@@ -144,27 +144,27 @@ class TestIOPerformanceBenchmark:
         assert "files_created" in result.metadata
 
     def test_io_performance_file_rotation(self):
-        """Test that I/O benchmark handles file rotation correctly."""
+        """Test that I / O benchmark handles file rotation correctly."""
         result = benchmark_io_performance(write_count=150, file_rotation_size=50)
 
         # Should create multiple files due to rotation
-        assert result.metadata["files_created"] >= 3  # 150/50 = 3 files
+        assert result.metadata["files_created"] >= 3  # 150 / 50 = 3 files
 
         # Should have reasonable file sizes
         assert result.metadata["total_file_size_bytes"] > 0
         assert result.metadata["avg_file_size_mb"] > 0
 
     def test_io_performance_throughput_metrics(self):
-        """Test I/O performance throughput metrics."""
+        """Test I / O performance throughput metrics."""
         result = benchmark_io_performance(write_count=500, file_rotation_size=100)
 
-        # Should achieve reasonable I/O throughput
+        # Should achieve reasonable I / O throughput
         assert result.throughput_mb_per_second > 0
 
         # Should have high success rate
         assert result.success_rate >= 0.95
 
-        # I/O efficiency should be reasonable (close to 1.0)
+        # I / O efficiency should be reasonable (close to 1.0)
         assert 0.5 <= result.metadata["io_efficiency"] <= 2.0
 
 
@@ -236,17 +236,19 @@ class TestComprehensiveBenchmarks:
         # Logging throughput should be high
         if "logging_throughput" in results_by_name:
             logging_result = results_by_name["logging_throughput"]
-            assert logging_result.ops_per_second >= 1000  # At least 1K logs/sec
+            assert logging_result.ops_per_second >= 1000  # At least 1K logs / sec
 
         # JSON serialization should be very fast
         if "json_serialization" in results_by_name:
             json_result = results_by_name["json_serialization"]
-            assert json_result.ops_per_second >= 5000  # At least 5K serializations/sec
+            assert (
+                json_result.ops_per_second >= 5000
+            )  # At least 5K serializations / sec
 
-        # I/O performance should be reasonable
+        # I / O performance should be reasonable
         if "io_performance" in results_by_name:
             io_result = results_by_name["io_performance"]
-            assert io_result.ops_per_second >= 500  # At least 500 writes/sec
+            assert io_result.ops_per_second >= 500  # At least 500 writes / sec
 
 
 class TestBenchmarkReporting:
@@ -283,7 +285,7 @@ class TestBenchmarkReporting:
         assert "Structured Logging Utilities Benchmark Report" in report
         assert "Test Benchmark 1" in report
         assert "Test Benchmark 2" in report
-        assert "1,000 ops/sec" in report
+        assert "1,000 ops / sec" in report
         assert "99.0%" in report
         assert "100.0%" in report
 
@@ -422,7 +424,9 @@ class TestBenchmarkErrorHandling:
     def test_benchmark_handles_logging_failures(self):
         """Test that benchmarks handle logging failures gracefully."""
         # Mock logger to raise exceptions
-        with patch("structured_logging_utilities.benchmarks.get_logger") as mock_get_logger:
+        with patch(
+            "structured_logging_utilities.benchmarks.get_logger"
+        ) as mock_get_logger:
             mock_logger = mock_get_logger.return_value
             mock_logger.info.side_effect = Exception("Logging failed")
 

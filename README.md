@@ -7,6 +7,13 @@
 
 Professional structured logging with performance monitoring and observability
 
+**Repo:** https://github.com/wmoore012/structured-logging-utilities
+**What it does:** Emits JSON logs with a consistent schema, correlation IDs, and perf metrics so ETL services stay machine-parseable end to end.
+
+## 🙋‍♂️ Why I Built It
+
+Every pipeline in CatalogLAB feeds downstream dashboards and experiments, so I standardized JSON logging early. This utility proves I don't just crunch numbers—I instrument them with correlation IDs, latency metrics, and PII scrubbing so SREs and analysts can debug issues fast. It's the same approach I'll bring to your data platform.
+
 ## 🚀 Performance Highlights
 
 **Handles 100K+ log events/second with <1ms latency**
@@ -22,8 +29,12 @@ Professional structured logging with performance monitoring and observability
 
 ## 📦 Installation
 
+Install from GitHub:
+
 ```bash
-pip install structured-logging-utilities
+git clone https://github.com/wmoore012/structured-logging-utilities.git
+cd structured-logging-utilities
+pip install -e .
 ```
 
 ## 🔥 Quick Start
@@ -140,6 +151,12 @@ Built by Wilton Moore at Perday Labs for production use. This module demonstrate
 - **DevOps Excellence**: CI/CD, monitoring, and deployment automation
 - **Security Expertise**: Threat modeling and secure coding practices
 - **Quality Assurance**: Comprehensive testing and code review processes
+
+## 📬 Contact
+
+Need structured logging help? Ping me:
+- LinkedIn: https://www.linkedin.com/in/wiltonmoore/
+- GitHub: https://github.com/wmoore012
 
 ---
 

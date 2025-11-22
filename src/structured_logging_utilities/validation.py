@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: MIT
-# Copyright (c) 2024 MusicScope
+# SPDX - License - Identifier: MIT
+# Copyright (c) 2025 Perday CatalogLAB™
 
 """
 Input validation utilities for professional error handling.
@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from .exceptions import ValidationError
 
@@ -33,7 +33,7 @@ def validate_not_none(value: Any, field_name: str) -> Any:
     """
     if value is None:
         raise ValidationError(
-            field_name, value, "non-None value", f"Provide a valid {field_name} value"
+            field_name, value, "non - None value", f"Provide a valid {field_name} value"
         )
     return value
 
@@ -42,8 +42,8 @@ def validate_string(
     value: Any,
     field_name: str,
     min_length: int = 1,
-    max_length: Optional[int] = None,
-    pattern: Optional[str] = None,
+    max_length: int | None = None,
+    pattern: str | None = None,
 ) -> str:
     """
     Validate that a value is a string with optional constraints.
@@ -63,7 +63,10 @@ def validate_string(
     """
     if not isinstance(value, str):
         raise ValidationError(
-            field_name, value, "string", f"Convert {field_name} to string or provide string input"
+            field_name,
+            value,
+            "string",
+            f"Convert {field_name} to string or provide string input",
         )
 
     if len(value) < min_length:
@@ -96,11 +99,11 @@ def validate_string(
 def validate_number(
     value: Any,
     field_name: str,
-    min_value: Optional[Union[int, float]] = None,
-    max_value: Optional[Union[int, float]] = None,
+    min_value: int | float | None = None,
+    max_value: int | float | None = None,
     allow_zero: bool = True,
     number_type: type = float,
-) -> Union[int, float]:
+) -> int | float:
     """
     Validate that a value is a number with optional constraints.
 
@@ -119,10 +122,7 @@ def validate_number(
         ValidationError: If validation fails
     """
     try:
-        if number_type == int:
-            validated_value = int(value)
-        else:
-            validated_value = float(value)
+        validated_value = int(value) if number_type == int else float(value)
     except (ValueError, TypeError):
         raise ValidationError(
             field_name,
@@ -133,7 +133,10 @@ def validate_number(
 
     if not allow_zero and validated_value == 0:
         raise ValidationError(
-            field_name, value, "non-zero number", f"Provide a non-zero value for {field_name}"
+            field_name,
+            value,
+            "non - zero number",
+            f"Provide a non - zero value for {field_name}",
         )
 
     if min_value is not None and validated_value < min_value:
@@ -174,7 +177,10 @@ def validate_path(value: Any, field_name: str, must_exist: bool = False) -> Path
         path = Path(value)
     except (TypeError, ValueError):
         raise ValidationError(
-            field_name, value, "valid file path", f"Provide a valid path string for {field_name}"
+            field_name,
+            value,
+            "valid file path",
+            f"Provide a valid path string for {field_name}",
         )
 
     if must_exist and not path.exists():
@@ -188,9 +194,9 @@ def validate_path(value: Any, field_name: str, must_exist: bool = False) -> Path
 def validate_dict(
     value: Any,
     field_name: str,
-    required_keys: Optional[List[str]] = None,
-    allowed_keys: Optional[List[str]] = None,
-) -> Dict[str, Any]:
+    required_keys: list[str] | None = None,
+    allowed_keys: list[str] | None = None,
+) -> dict[str, Any]:
     """
     Validate that a value is a dictionary with optional key constraints.
 
